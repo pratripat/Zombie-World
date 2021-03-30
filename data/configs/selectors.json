@@ -1,0 +1,30 @@
+{
+  "grass": {
+    "id": "grass",
+    "spritesheet_path": "data/graphics/spritesheet/grass.png",
+    "resize": true,
+    "scale": null,
+    "autotile_config": "data/configs/grass_autotile_config.json"
+  },
+  "tree": {
+    "id": "tree",
+    "spritesheet_path": "data/graphics/spritesheet/tree.png",
+    "resize": true,
+    "scale": 2,
+    "autotile_config": null
+  },
+  "bush": {
+    "id": "bush",
+    "spritesheet_path": "data/graphics/spritesheet/bush.png",
+    "resize": true,
+    "scale": 2,
+    "autotile_config": null
+  },
+  "coin": {
+    "id": "coin",
+    "spritesheet_path": "data/graphics/spritesheet/coin.png",
+    "resize": true,
+    "scale": 3,
+    "autotile_config": null
+  }
+}
