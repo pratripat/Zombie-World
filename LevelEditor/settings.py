@@ -18,7 +18,7 @@ cols = width//res
 
 scroll = [0,0]
 
-colors = json.load(open('data/graphics/colors.json', 'r'))
+colors = json.load(open('data/configs/colors.json', 'r'))
 
 selection = {
     'image': None

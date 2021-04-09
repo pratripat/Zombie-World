@@ -36,7 +36,7 @@ class Selector_Panel:
         self.selectors = []
 
         #Loads the json file for the selector configuration
-        data = json.load(open('data/selectors.json', 'r'))
+        data = json.load(open('data/configs/selectors.json', 'r'))
 
         x = 10
         y = 10

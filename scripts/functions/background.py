@@ -1,22 +1,33 @@
-from settings import *
+import pygame
+
+PATH = 'data/graphics/images/'
 
 class Background:
     def __init__(self):
-        self.image = pygame.transform.scale2x(pygame.image.load('data/graphics/background.png')).convert()
+        self.mountain_image = pygame.transform.scale2x(pygame.image.load(PATH+'mountain.png')).convert()
+        self.cloud_image = pygame.transform.scale2x(pygame.image.load(PATH+'cloud.png')).convert_alpha()
 
-    def show(self):
-        x = -scroll[0]*0.25
-        y = height-self.image.get_height()-100-scroll[1]*0.25
+    #Renders the same images until they fill the screen
+    def render_image(self, x, y, amount, image, screen, scroll):
+        image.set_colorkey((0,0,0))
 
-        screen.fill(colors['background'])
-        pygame.draw.rect(screen, colors['mountain'], (0, y+self.image.get_height(), screen.get_width(), screen.get_height()-y+self.image.get_height()))
+        x -= scroll[0]*amount
+        y -= scroll[1]*amount
 
-        screen.blit(self.image, (x, y))
+        screen.blit(image, (x,y))
 
-        while x+self.image.get_width() > 0:
-            x -= self.image.get_width()
-            screen.blit(self.image, (x, y))
+        while x+image.get_width() > 0:
+            x -= image.get_width()
+            screen.blit(image, (x, y))
 
         while x < screen.get_width():
-            x += self.image.get_width()
-            screen.blit(self.image, (x, y))
+            x += image.get_width()
+            screen.blit(image, (x, y))
+
+    #Draws the mountain and cloud image on the screen
+    def show(self, screen, scroll):
+        screen.fill((44,232,245))
+        pygame.draw.rect(screen, (38, 43, 68), (0, (400-scroll[1]*0.2)+self.mountain_image.get_height(), screen.get_width(), screen.get_height()-(400-scroll[1]*0.2)+self.mountain_image.get_height()))
+
+        self.render_image(0, 400, 0.2, self.mountain_image, screen, scroll)
+        self.render_image(0, 70, 0.4, self.cloud_image, screen, scroll)

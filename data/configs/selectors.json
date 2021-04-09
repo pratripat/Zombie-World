@@ -26,5 +26,26 @@
     "resize": true,
     "scale": 3,
     "autotile_config": null
+  },
+  "zombie": {
+    "id": "zombie",
+    "spritesheet_path": "data/graphics/spritesheet/zombie.png",
+    "resize": true,
+    "scale": 2,
+    "autotile_config": null
+  },
+  "player": {
+    "id": "player",
+    "spritesheet_path": "data/graphics/spritesheet/player.png",
+    "resize": true,
+    "scale": 2,
+    "autotile_config": null
+  },
+  "door": {
+    "id": "door",
+    "spritesheet_path": "data/graphics/spritesheet/door.png",
+    "resize": false,
+    "scale": null,
+    "autotile_config": null
   }
 }

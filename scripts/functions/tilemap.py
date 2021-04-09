@@ -11,6 +11,7 @@ class TileMap:
         self.tiles = []
         self.filename = filename
 
+    #Loads the json file (map) and stores all the images
     def load_map(self):
         data = json.load(open(self.filename, 'r'))
 
@@ -30,6 +31,13 @@ class TileMap:
             except Exception as e:
                 print(e)
 
+        #Sorting the tiles according to the layer
+        def get_layer(dict):
+            return dict['layer']
+
+        self.tiles.sort(key=get_layer)
+
+    #Returns tiles with same id and layer(not necessary)
     def get_tiles(self, id, layer=None):
         tiles = []
 
