@@ -1,21 +1,24 @@
-from settings import *
+import pygame
 
+#Returns all the images from spritesheet
 def load_images_from_spritesheet(filename):
     #Tries to load the file
     try:
         spritesheet = pygame.image.load(filename).convert()
     except:
-        print('SPRITESHEET LOADER: file not found...')
+        print('SPRITESHEET LOADER: file not found...', f'file is {filename}')
         return []
 
     rows = []
     images = []
 
+    #Searches for all the blue pixels in the first column
     for y in range(spritesheet.get_height()):
         pixil = spritesheet.get_at((0, y))
         if pixil[2] == 255:
             rows.append(y)
 
+    #Searches for yellow pixels(starting point) and the pink pixels(dimensions) of the image
     for row in rows:
         for x in range(spritesheet.get_width()):
             start_position = []
@@ -36,6 +39,7 @@ def load_images_from_spritesheet(filename):
                         height = rel_y - start_position[1]
                         break
 
+                #Makes new image from the spritesheet
                 image = pygame.Surface((width, height))
                 image.set_colorkey((0,0,0))
                 image.blit(spritesheet, (-start_position[0], -start_position[1]))
@@ -44,8 +48,6 @@ def load_images_from_spritesheet(filename):
 
     return images
 
+#Returns the collision between two rects
 def rect_rect_collision(rect1, rect2):
     return rect1.colliderect(rect2)
-
-def mask_mask_collision(mask1, mask2, offset):
-    return mask1.overlap(mask2, offset)

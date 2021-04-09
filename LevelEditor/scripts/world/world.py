@@ -135,7 +135,7 @@ class World:
             position = entity['position']
 
             layer = self.get_layer(layer)
-            image = load_images_from_spritesheet(f'data/graphics/{id}.png')[index]
+            image = load_images_from_spritesheet(f'data/graphics/spritesheet/{id}.png')[index]
             image = pygame.transform.scale(image, dimensions)
             image_object = Image(*position, position[0]*res, position[1]*res, {'image':image, 'index':index, 'id':id})
             layer.images.append(image_object)

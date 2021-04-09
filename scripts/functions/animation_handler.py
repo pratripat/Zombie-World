@@ -8,6 +8,7 @@ class Animation_Data:
         self.load_frames(colorkey)
         self.load_config()
 
+    #Loads all the animation frames(sorted) and stores it
     def load_frames(self, colorkey):
         paths = []
         self.images = []
@@ -28,6 +29,7 @@ class Animation_Data:
             image.set_colorkey(colorkey)
             self.images.append(image)
 
+    #Loads animation configuration
     def load_config(self):
         try:
             self.config = json.load(open(self.path+'/'+'config.json', 'r'))
@@ -44,15 +46,19 @@ class Animation_Data:
             file.write(json.dumps(self.config))
             file.close()
 
+    #Returns total number of frames of the animation
     def get_frames(self):
         return self.config['frames']
 
+    #Returns all the frames in the form of images
     def get_images(self):
         return self.images
 
+    #Returns the scale of the animation
     def get_scale(self):
         return self.config['scale']
 
+    #Returns the time taken(in frames) to finish the animation
     def duration(self):
         return sum(self.config['frames'])
 
@@ -62,6 +68,7 @@ class Animation:
         self.frame = 0
         self.load_image()
 
+    #Gets the image from the current frame
     def load_image(self):
         frames = self.animation_data.get_frames()
         images = self.animation_data.get_images()
@@ -75,6 +82,7 @@ class Animation:
                 self.image = pygame.transform.scale(images[i], (round(images[i].get_width()*scale), round(images[i].get_height()*scale)))
                 break
 
+    #Renders the current image
     def render(self, surface, position, flipped, colorkey):
         offset = [0,0]
         image = self.image
@@ -89,6 +97,7 @@ class Animation:
 
         surface.blit(image, (position[0]+offset[0], position[1]+offset[1]))
 
+    #Updates the current frame according to delta time
     def run(self, dt):
         self.frame += dt*60*self.animation_data.config['speed']
 
@@ -100,14 +109,12 @@ class Animation:
 
         self.load_image()
 
+    #The current image
     @property
     def current_image(self):
         return self.image
 
-    @property
-    def mask(self):
-        return pygame.mask.from_surface(self.current_image)
-
+#Loads all the animations from the animations folder
 class Animation_Handler:
     def __init__(self):
         self.animations = {}
@@ -115,36 +122,6 @@ class Animation_Handler:
         for animation in os.listdir(animation_path):
             self.animations[animation] = Animation_Data(animation_path+'/'+animation)
 
+    #Returns animation with the animation id
     def get_animation(self, animation_id):
         return Animation(self.animations.get(animation_id))
-
-if __name__ == '__main__':
-    width = height = 600
-    screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption('Animation Handler')
-
-    clock = pygame.time.Clock()
-
-    animation_handler = Animation_Handler()
-    player_idle_animation = animation_handler.get_animation('player_idle')
-    player_run_animation = animation_handler.get_animation('player_run')
-
-    def get_fps():
-        if clock.get_fps() == 0:
-            return 0
-        return 1/clock.get_fps()
-
-    while True:
-        clock.tick()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-        screen.fill((0,0,0))
-        player_idle_animation.run(get_fps())
-        player_idle_animation.render(screen, (width//2, height//2))
-        player_run_animation.run(get_fps())
-        player_run_animation.render(screen, (width//2+100, height//2))
-        pygame.display.update()

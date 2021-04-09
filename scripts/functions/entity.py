@@ -12,6 +12,7 @@ class Entity:
         self.flipped = False
         self.collisions = {k:False for k in ('top', 'right', 'bottom', 'left')}
 
+    #Renders the current animation of the entity
     def render(self, surface, scroll, colorkey=None):
         offset = [0,0]
 
@@ -21,13 +22,15 @@ class Entity:
 
         self.current_animation.render(surface, (self.position[0]+offset[0]-scroll[0], self.position[1]+offset[1]-scroll[1]), self.flipped, colorkey)
 
+    #Updates the animation
     def update(self, dt):
         self.current_animation.run(dt)
 
-    def move(self, rects):
+    #Moves the object and collides with rects
+    def move(self, rects, dt):
         self.collisions = {k:False for k in ('top', 'right', 'bottom', 'left')}
 
-        self.position[0] += self.velocity[0]
+        self.position[0] += round(self.velocity[0]*dt*80)
         hit_list = self.get_colliding_objects(rects)
         rect = self.rect
 
@@ -43,7 +46,7 @@ class Entity:
             if self.centered:
                 self.position[0] += self.image.get_width()//2
 
-        self.position[1] += self.velocity[1]
+        self.position[1] += round(self.velocity[1]*dt*80)
         hit_list = self.get_colliding_objects(rects)
         rect = self.rect
 
@@ -59,6 +62,7 @@ class Entity:
             if self.centered:
                 self.position[1] += self.image.get_height()//2
 
+    #Returns the rects the player is colliding with
     def get_colliding_objects(self, objs):
         hit_list = []
         for obj in objs:
@@ -67,9 +71,7 @@ class Entity:
 
         return hit_list
 
-    def set_velocity(self, velocity):
-        self.velocity = velocity
-
+    #Sets the current animation of the entity
     def set_animation(self, animation):
         animation = self.id+'_'+animation
 
@@ -80,13 +82,18 @@ class Entity:
             self.current_animation = self.animations.get_animation(animation)
             self.current_animation_id = animation
 
+    #FLips the entity horizontally (when rendering only)
     def flip(self, bool):
         self.flipped = bool
 
+    #Returns the current animation's current image
     @property
     def image(self):
-        return self.current_animation.current_image
+        image = self.current_animation.current_image
 
+        return image
+
+    #Returns the rect of the current image
     @property
     def rect(self):
         if self.centered:
@@ -94,6 +101,7 @@ class Entity:
 
         return pygame.Rect(*self.position, *self.image.get_size())
 
+    #Gives the center of the entity
     @property
     def center(self):
         if self.centered:

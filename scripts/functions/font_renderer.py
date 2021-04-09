@@ -8,6 +8,7 @@ class Font:
         self.characters = [chr(i) for i in range(33, 97)]
         self.space_width = 10
 
+    #Loads all the images from the spritesheet
     def load_characters(self):
         self.images = []
         images = load_images_from_spritesheet(self.filename+'.png')
@@ -15,6 +16,7 @@ class Font:
         for image in images:
             self.images.append(image)
 
+    #Returns the surface on which the text will be rendered
     def get_surface(self, text):
         width = 0
         height = 0
@@ -36,6 +38,7 @@ class Font:
 
         return surface
 
+    #Changes the color of the text
     def change_color(self, surface, old_color, new_color):
         surface.set_colorkey(old_color)
         surf = surface.copy()
@@ -43,7 +46,9 @@ class Font:
         surf.blit(surface, (0,0))
         return surf
 
+    #Renders the text on the surface
     def render(self, screen, text, position, center=(False, False), scale=1, color=None, background_color=None):
+        text = text.upper()
         surface = self.get_surface(text)
         surface = pygame.transform.scale(surface, (round(surface.get_width()*scale), round(surface.get_height()*scale)))
         temp_pos = [0,0]
@@ -64,35 +69,14 @@ class Font:
             surface = self.change_color(surface, (255,0,0), color)
             surface.set_colorkey((0,0,0))
 
-        if background_color:
-            background = pygame.Surface(surface.get_size())
-            background.fill(background_color)
-            screen.blit(background, position)
-
         if center[0]:
             position = [position[0]-surface.get_width()/2, position[1]]
         if center[1]:
             position = [position[0], position[1]-surface.get_height()/2]
 
+        if background_color:
+            background = pygame.Surface(surface.get_size())
+            background.fill(background_color)
+            screen.blit(background, position)
+
         screen.blit(surface, position)
-
-if __name__ == '__main__':
-    pygame.init()
-
-    width = 1000
-    height = 600
-    screen = pygame.display.set_mode((width, height), pygame.SCALED+pygame.RESIZABLE)
-    pygame.display.set_caption('Font renderer')
-
-    f = Font('character_spritesheet')
-    f.load_characters(3)
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-        screen.fill((255,255,255))
-        f.render(screen, 'Pratyush', [0,0], (0,255,0))
-        pygame.display.update()

@@ -43,7 +43,7 @@ class Selector:
     def load_images(self):
         images = load_images_from_spritesheet(self.filename)
         x = 10
-        y = 100
+        y = 130
 
         for i, image in enumerate(images):
             if y > height:
